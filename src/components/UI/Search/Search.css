@@ -1,0 +1,15 @@
+button {
+    cursor: pointer;
+    border: 1px solid #08faec;
+    background-color: #08faec;
+    width: 33px;
+    height: 34px;
+
+    transition: all .3s linear;
+}
+
+button:hover {
+    background-color: #0de0e0;
+    border-color: #0de0e0;
+    border-radius: 10px;
+}

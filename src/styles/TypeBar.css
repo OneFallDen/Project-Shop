@@ -1,0 +1,23 @@
+.type-list {
+    list-style-type: none;
+    width: fit-content;
+}
+
+.type-list-item, .type-list-item-active {
+    padding: 10px 10px;
+    margin: 10px 0;
+    border: 2px solid teal;
+    cursor: pointer;
+
+    transition: border-radius .3s linear;
+}
+
+.type-list-item:hover {
+    border-radius: 10px;
+}
+
+.type-list-item-active {
+    border-radius: 20px;
+    border-color: #08faec;
+    background-color: #01b9b9;
+}
