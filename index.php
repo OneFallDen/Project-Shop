@@ -4,30 +4,33 @@
 
     require('connection.php');
     require('functions.php');
-    
-    $query = "SELECT * FROM users;";
-    $result = pg_exec($connection, $query);
-    
+
+
     $type = $_GET['path'];
-    
-    echo $type;
-    
-    if($type === 'users'){
-        $user = [];
-    
-        $usersList = [];
-        
-        for ($row = 0; $row < pg_numrows($result); $row++) {
 
-            $usersList[] = pg_fetch_assoc($result);
+    switch($type){
+    
+        case 'users':
+            $query = "SELECT * FROM users;";
+            $result = pg_exec($connection, $query);
+            $user = [];
 
-        }   
-        
-        echo json_encode($usersList);
+            $usersList = [];
+
+            for ($row = 0; $row < pg_numrows($result); $row++) {
+
+                $usersList[] = pg_fetch_assoc($result);
+
+            }
+
+            echo json_encode($usersList);
+
+            break;
+
+        case 'goods':
+            getGoods($connection);
+            break;
+
     }
-    
-    
-   
-    
-    
+
 ?>  
