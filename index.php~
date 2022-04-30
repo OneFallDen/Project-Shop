@@ -1,0 +1,14 @@
+<?php
+    require('connection.php');
+    $name = "green";
+    $query = "SELECT username, password FROM users WHERE username = '$name';";
+        $result = pg_exec($connection, $query);
+        for ($row = 0; $row < pg_numrows($result); $row++) {
+
+            $username = pg_fetch_result($result, $row, 'username');
+            $password = pg_fetch_result($result, $row, 'password');
+            
+        }
+        echo $username . " " . $password;
+        
+?>  
