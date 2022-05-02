@@ -65,15 +65,15 @@
             }
             break;
 
-    /*    case 'PATCH':
-            switch($params[0]):
+        case 'PATCH':
+            switch($params[0]){
                 case 'goods':
-                    if(isset($params[1])){
-                        $data = file_get_contents('php://input');
-                        updateGoods($connection,$data);
-                    }
+                    $data = file_get_contents('php://input');
+                    $data = json_decode($data,true);
+                    updateGoods($connection,$data);
                     break;
-            break;*/
+            }
+            break;
     }
 
 ?>

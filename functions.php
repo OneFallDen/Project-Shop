@@ -163,8 +163,21 @@
 
     }
 
-  /*  function updateGoods($connection,$data){
+    function updateGoods($connection,$data){
+      $brand = $data['brand'];
+      $price = $data['price'];
+      $type = $data['type'];
+      $description = $data['description'];
+      $name = $data['name'];
 
-  }*/
+      $query = "SELECT * FROM shop WHERE brand = '".$brand."';";
+      $result = pg_exec($connection, $query);
+      $shop_id = pg_fetch_result($result, 0, 'id');
+
+      echo $brand;
+
+      $query = "UPDATE goods SET shop_id = ".$shop_id.",price = ".$price.",type = '".$type."',description = '".$description."', name = '".$name."' WHERE name = '".$name."';";
+      $result = pg_exec($connection, $query);
+    }
 
 ?>
