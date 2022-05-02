@@ -48,6 +48,32 @@
                 }
             break;
 
+        case 'POST':
+            switch($params[0]){
+                case 'favorite':
+                    if(isset($params[1]))
+                        postFav($connection,$_POST,$params[1]);
+                    break;
+
+                case 'reg':
+                    postReg($connection,$_POST);
+                    break;
+
+                case 'goods':
+                    postGoods($connection,$_POST);
+                    break;
+            }
+            break;
+
+    /*    case 'PATCH':
+            switch($params[0]):
+                case 'goods':
+                    if(isset($params[1])){
+                        $data = file_get_contents('php://input');
+                        updateGoods($connection,$data);
+                    }
+                    break;
+            break;*/
     }
 
 ?>

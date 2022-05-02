@@ -108,4 +108,63 @@
         echo json_encode($authList);
     }
 
+    function postReg($connection,$data){
+        $username = $data['username'];
+        $password = $data ['password'];
+        $repassword = $data ['repassword'];
+
+        if($password === $repassword){
+            $query = "INSERT INTO users(username,password) VALUES('".$username."','".$password."')";
+            $result = pg_exec($connection, $query);
+            echo 'registration successful';
+        } else {
+          echo 'login or password uncorrect';
+        }
+
+    }
+
+    function postGoods($connection,$data){
+        $brand = $data['brand'];
+        $price = $data['price'];
+        $type = $data['type'];
+        $description = $data['description'];
+        $name = $data['name'];
+
+        $query = "SELECT * FROM shop WHERE brand = '".$brand."';";
+        $result = pg_exec($connection, $query);
+        $shop_id = pg_fetch_result($result, 0, 'id');
+
+        $query = "INSERT INTO goods(shop_id,price,type,description,name) VALUES(".$shop_id.",".$price.",'".$type."','".$description."','".$name."')";
+        $result = pg_exec($connection, $query);
+
+    }
+
+    function postFav($connection,$data,$username){
+        $goods_name = $data['name'];
+
+        $query = "SELECT * FROM goods WHERE name = '".$goods_name."';";
+        $result = pg_exec($connection, $query);
+        $goods_id = pg_fetch_result($result, 0, 'id');
+
+        $query = "SELECT * FROM users WHERE username = '".$username."';";
+        $result = pg_exec($connection, $query);
+        $user_id = pg_fetch_result($result, 0, 'id');
+
+        $query = "SELECT * FROM favorite WHERE user_id = ".$user_id." AND goods_id =".$goods_id.";";
+        $result = pg_exec($connection, $query);
+
+        if(pg_numrows($result) < 1){
+            $query = "INSERT INTO favorite VALUES(".$user_id.",".$goods_id.");";
+            $result = pg_exec($connection, $query);
+            echo "Added in fav";
+        } else {
+            echo "Already in fav";
+        }
+
+    }
+
+  /*  function updateGoods($connection,$data){
+
+  }*/
+
 ?>
