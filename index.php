@@ -5,32 +5,49 @@
     require('connection.php');
     require('functions.php');
 
+    $method = $_SERVER['REQUEST_METHOD'];
 
-    $type = $_GET['path'];
 
-    switch($type){
-    
-        case 'users':
-            $query = "SELECT * FROM users;";
-            $result = pg_exec($connection, $query);
-            $user = [];
+    $q = $_GET['path'];
 
-            $usersList = [];
+    $params = explode('/', $q);
 
-            for ($row = 0; $row < pg_numrows($result); $row++) {
+    switch($method){
 
-                $usersList[] = pg_fetch_assoc($result);
+        case 'GET':
+            switch($params[0]){
 
-            }
+                case 'goods':
+                    if(isset($params[1])){
+                        if(isset($params[2])){
+                            getSortGoods($connection,$params[1],$params[2]);
+                        }
+                        else{
+                            getHalfSortGoods($connection,$params[1]);
+                        }
+                    }
+                    else
+                        getGoods($connection);
+                    break;
 
-            echo json_encode($usersList);
+                case 'favorite':
+                    if(isset($params[1]))
+                        getFav($connection,$params[1]);
+                    break;
 
-            break;
+                case 'auth':
+                    if(isset($params[1]))
+                        getAuth($connection,$params[1]);
+                    break;
 
-        case 'goods':
-            getGoods($connection);
+                case 'admin':
+                    if(isset($params[1]))
+                        getAdmin($connection,$params[1]);
+                    break;
+
+                }
             break;
 
     }
 
-?>  
+?>
