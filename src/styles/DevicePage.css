@@ -1,0 +1,54 @@
+.device-page {
+    width: 100%;
+    display: flex;
+}
+
+.device-page-img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    margin: 20px 10px 0 20px;
+}
+
+.device-page-info {
+    margin-top: 20px;
+}
+
+.device-page-title {
+    font-weight: 700;
+    font-size: 40px;
+    color: teal;
+}
+
+.device-page-price {
+    font-weight: 700;
+    color: #10a8a0;
+    font-size: 30px;
+    margin-top: 5px;
+}
+
+.device-page-text {
+    font-weight: 400;
+    width: 100%;
+    max-width: 500px;
+    font-size: 20px;
+    color: #181717;
+    margin-top: 20px;
+}
+
+.device-page-btn {
+    width: 20px;
+    height: 20px;
+}
+
+.device-page-btn-img {
+    width: 30px;
+    height: 30px;
+    margin-top: 20px;
+    cursor: pointer;
+}
+
+.device-page-btn-img:hover {
+    width: 35px;
+    height: 35px;
+}

@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import { Route, Routes} from 'react-router-dom';
 import {authRoutes, publicRoutes} from "../routes";
 import Shop from "../pages/Shop";
 import {Context} from "../index";

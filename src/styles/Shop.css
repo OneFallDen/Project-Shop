@@ -1,0 +1,8 @@
+.main__content {
+    display: flex;
+}
+
+.main__content__right {
+    margin-top: 10px;
+    width: 100%;
+}

@@ -1,0 +1,35 @@
+.device-list {
+    margin: 30px 0 0 30px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.device-list-item {
+    margin: 30px 15px 0 0;
+    cursor: pointer;
+
+    transition: transform .3s linear, box-shadow .2s linear;
+}
+
+.device-list-item:hover {
+    outline: 2px solid teal;
+    transform: translateY(-8px);
+    box-shadow: 10px 10px 5px gray;
+}
+
+.device-list-item-img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+}
+
+.device-list-item-title {
+    font-weight: 700;
+    font-size: 30px;
+}
+
+.device-list-item-price {
+    font-weight: 400;
+    font-size: 18px;
+}

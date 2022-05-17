@@ -1,6 +1,7 @@
 .type-list {
     list-style-type: none;
     width: fit-content;
+    margin: 0 auto;
 }
 
 .type-list-item, .type-list-item-active {
@@ -20,4 +21,5 @@
     border-radius: 20px;
     border-color: #08faec;
     background-color: #01b9b9;
+    font-weight: 700;
 }

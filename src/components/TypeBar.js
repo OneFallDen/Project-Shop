@@ -11,7 +11,7 @@ const TypeBar = observer(() => {
                 <li
                     className={type.id === device.selectedType.id ? "type-list-item-active" : "type-list-item"}
                     key={type.id}
-                    onClick={() => device.setSelectedType(type)}
+                    onClick={() => {device.setSelectedType(type); device.typeSortDevices()}}
                 >
                     {type.name}
                 </li>

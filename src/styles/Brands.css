@@ -1,0 +1,24 @@
+.brands-list {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+}
+
+.brands-list-item, .brands-list-item-active  {
+    margin-left: 10px;
+    padding: 10px;
+    border: 2px solid #08faec;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .3s linear;
+}
+
+.brands-list-item:hover {
+    transform: translateY(-5px);
+}
+
+.brands-list-item-active {
+    transform: translateY(-5px);
+    background-color: #01b9b9;
+    font-weight: 700;
+}
