@@ -1,0 +1,31 @@
+.favourite-list {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+    margin-left: 30px;
+}
+
+.favourite-item {
+    margin: 0 30px 30px 0;
+    text-align: center;
+    padding: 20px;
+
+    transition: transform .3s linear;
+}
+
+.favourite-item:hover {
+    outline: 2px solid #10a8a0;
+    transform: translateY(-10px);
+    cursor: pointer;
+}
+
+.favourite-item:last-child {
+    margin: 0 0 30px 0;
+}
+
+.favourite-img {
+    width: 100%;
+    max-width: 200px;
+    height: 150px;
+}

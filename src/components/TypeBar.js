@@ -9,11 +9,11 @@ const TypeBar = observer(() => {
         <ul className="type-list">
             {device.types.map(type =>
                 <li
-                    className={type.id === device.selectedType.id ? "type-list-item-active" : "type-list-item"}
-                    key={type.id}
+                    className={type.type === device.selectedType.type ? "type-list-item-active" : "type-list-item"}
+                    key={type}
                     onClick={() => {device.setSelectedType(type); device.typeSortDevices()}}
                 >
-                    {type.name}
+                    {type.type}
                 </li>
             )}
         </ul>

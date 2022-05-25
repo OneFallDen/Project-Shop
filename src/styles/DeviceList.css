@@ -8,6 +8,9 @@
 .device-list-item {
     margin: 30px 15px 0 0;
     cursor: pointer;
+    width: 100%;
+    max-width: 200px;
+    height: auto;
 
     transition: transform .3s linear, box-shadow .2s linear;
 }
@@ -22,6 +25,7 @@
     width: 100%;
     max-width: 300px;
     height: auto;
+    max-height: 60%;
 }
 
 .device-list-item-title {

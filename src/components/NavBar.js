@@ -7,21 +7,43 @@ import MyInput from "./UI/MyInput/MyInput";
 import Search from "./UI/Search/Search";
 import searchImg from '../assets/magnifying-glass.png';
 import {observer} from "mobx-react-lite";
+import { useState} from 'react';
+import DeviceService from '../API/DeviceService';
 
 const NavBar = observer(() => {
     const {user} = useContext(Context)
+    const [search, setSearch] = useState('')
+    const {device} = useContext(Context)
+
+    async function breakAuth(id) {
+        const response = await DeviceService.BreakAuth(id)
+        document.cookie = 0
+        console.log(response);
+        return response
+    }
+
     return (
         <header className="header">
             <div className="container">
                 <div className="header__inner">
                     <NavLink to={SHOP_ROUTE} className="header__logo">СПБ-Каталог</NavLink>
                     <div className="search-group" style={{display: "flex", position: "relative"}}>
-                        <MyInput placeholder="Поиск по катологу..."/>
+                        <MyInput 
+                            onChange={(e) => {setSearch(e.target.value); device.searchSortDevices(search)}} 
+                            placeholder="Поиск по катологу..."
+                        />
                         <Search><img src={searchImg} alt=""/></Search>
                     </div>
                     <ul className="header__nav">
-                        <li className="header__nav-item">{user._isAuth ?
-                            <NavLink className="header__nav-link" to={LOGIN_ROUTE}>Выйти</NavLink> :
+                        <li className="header__nav-item">{user.isAuth ?
+                            <NavLink 
+                                className="header__nav-link" 
+                                to={LOGIN_ROUTE}
+                                onClick={() => breakAuth(document.cookie)}
+                            >
+                                Выйти
+                            </NavLink> 
+                            :
                             <NavLink className="header__nav-link" to={REGISTRATION_ROUTE}>Войти</NavLink>}
                         </li>
                         {user._isAuth ? <li className="header__nav-item"><NavLink className="header__nav-link" to={FAVOURITE_ROUTE}>Избранное</NavLink></li> : ''}

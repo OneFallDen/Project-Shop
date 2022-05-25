@@ -20,12 +20,10 @@ export const publicRoutes = [
     {
         path: DEVICE_ROUTE + '/:id',
         Component: DevicePage
-    }
-]
-
-export const authRoutes = [
+    },
     {
         path: FAVOURITE_ROUTE,
         Component: Favourite
     }
+
 ]

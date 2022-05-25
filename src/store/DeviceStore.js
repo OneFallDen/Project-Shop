@@ -1,16 +1,15 @@
 import {makeAutoObservable} from "mobx";
-import DeviceService from "../API/DeviceService";
 
 export default class DeviceStore {
     constructor() {
         this._types = [
-            {id: 1, name: 'Телефон'},
-            {id: 2, name: 'Ноутбук'},
-            {id: 3, name: 'Планшет'}
+            {type: 'Телефон'},
+            {type: 'Ноутбук'},
+            {type: 'Планшет'}
         ]
         this._brands = [
-            {id: 1, name: 'Apple'},
-            {id: 2, name: 'Honor'},
+            {id: 1, brand: 'Apple'},
+            {id: 2, brand: 'Honor'},
         ]
         this._devices = [
             {id: 1, name: 'Iphone 12', price: 250000, img:'http://via.placeholder.com/300x200', description: 'lorem asdfasdf asdfasdf asdfasdf asdfasdfasdf', type: 'Телефон', brand: 'Apple'},
@@ -26,22 +25,24 @@ export default class DeviceStore {
         this._selectedBrand = {}
         this._typeSortedDevices = {}
         this._searchDevice = {}
+        this._favouriteDevice = {}
         makeAutoObservable(this)
     }
+
     searchSortDevices(search) {
         if(search.length >= 2) {
-            this._searchDevice  = this._devices.filter(dev => dev.name.includes(search))
+            this._searchDevice  = this._devices.filter(dev => dev.name.toLowerCase().includes(search.toLowerCase()))
         } else {
             this._searchDevice = {}
         }
     }
     typeSortDevices() {
-        if (this._selectedBrand.id === undefined) {
-            this._typeSortedDevices = this._devices.filter(el => el.type === this._selectedType.name)
-        } else if (this._selectedType.id === undefined) {
-            this._typeSortedDevices = this._devices.filter(el => el.brand === this._selectedBrand.name)
+        if (this._selectedBrand.brand === undefined) {
+            this._typeSortedDevices = this._devices.filter(el => el.type === this._selectedType.type)
+        } else if (this._selectedType.type === undefined) {
+            this._typeSortedDevices = this._devices.filter(el => el.brand === this._selectedBrand.brand)
         } else {
-            this._typeSortedDevices = this._devices.filter(el => el.type === this._selectedType.name && el.brand === this._selectedBrand.name)
+            this._typeSortedDevices = this._devices.filter(el => el.type === this._selectedType.type && el.brand === this._selectedBrand.brand)
         }
     }
 
@@ -71,6 +72,9 @@ export default class DeviceStore {
             this._selectedBrand = {}
         }
     }
+    setFavourite(favourite) {
+        this._favouriteDevice = favourite
+    }
 
     get types() {
         return this._types
@@ -92,5 +96,8 @@ export default class DeviceStore {
     }
     get searchedDevice() {
         return this._searchDevice
+    }
+    get favourite() {
+        return this._favouriteDevice
     }
 }
