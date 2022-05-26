@@ -1,14 +1,14 @@
 <?php
 
     function getGoods($connection){
-        $query = "SELECT * FROM goods LEFT JOIN shop ON goods.shop_id = shop.id;";
-        $result = pg_exec($connection, $query);
+        $query = "SELECT goods.id, goods.price, goods.type, goods.description, goods.name, goods.img, shop.brand FROM goods LEFT JOIN shop ON goods.shop_id = shop.id;";
+        $result = $connection->query($query);
 
         $goodsList = [];
 
-        for ($row = 0; $row < pg_numrows($result); $row++) {
+        for ($row = 0; $row < $result->num_rows; $row++) {
 
-            $goodsList[] = pg_fetch_assoc($result);
+            $goodsList[] = $result->fetch_assoc();
 
         }
 
@@ -17,13 +17,43 @@
 
     function getSortGoods($connection,$brand,$type){
         $query = "SELECT * FROM goods LEFT JOIN shop ON goods.shop_id = shop.id WHERE shop.brand = '".$brand."' AND goods.type = '".$type."';";
-        $result = pg_exec($connection, $query);
+        $result = $connection->query($query);
 
         $goodsList = [];
 
-        for ($row = 0; $row < pg_numrows($result); $row++) {
+        for ($row = 0; $row < $result->num_rows; $row++) {
 
-            $goodsList[] = pg_fetch_assoc($result);
+            $goodsList[] = $result->fetch_assoc();
+
+        }
+
+        echo json_encode($goodsList);
+    }
+
+    function getBrands($connection){
+        $query = "SELECT * FROM shop;";
+        $result = $connection->query($query);
+
+        $goodsList = [];
+
+        for ($row = 0; $row < $result->num_rows; $row++) {
+
+            $goodsList[] = $result->fetch_assoc();
+
+        }
+
+        echo json_encode($goodsList);
+    }
+
+    function getTypes($connection){
+        $query = "SELECT DISTINCT type FROM goods;";
+        $result = $connection->query($query);
+
+        $goodsList = [];
+
+        for ($row = 0; $row < $result->num_rows; $row++) {
+
+            $goodsList[] = $result->fetch_assoc();
 
         }
 
@@ -49,77 +79,101 @@
               break;
         }
 
-        $result = pg_exec($connection, $query);
+        $result = $connection->query($query);
 
         $goodsList = [];
 
-        for ($row = 0; $row < pg_numrows($result); $row++) {
+        for ($row = 0; $row < $result->num_rows; $row++) {
 
-            $goodsList[] = pg_fetch_assoc($result);
+            $goodsList[] = $result->fetch_assoc();
 
         }
 
         echo json_encode($goodsList);
     }
 
-    function getFav($connection,$username){
+    function getFav($connection,$session_id){
 
-        $query = "SELECT favorite.user_id, favorite.goods_id, users.username, goods.name, shop.brand FROM favorite LEFT JOIN users ON favorite.user_id = users.id JOIN goods ON favorite.goods_id = goods.id JOIN shop ON shop.id = goods.shop_id WHERE users.username = '".$username."';";
-        $result = pg_exec($connection, $query);
+        #$query = "SELECT favorite.user_id, favorite.goods_id, users.username, goods.name, shop.brand FROM favorite LEFT JOIN users ON favorite.user_id = users.id JOIN goods ON favorite.goods_id = goods.id JOIN shop ON shop.id = goods.shop_id WHERE users.username = '".$username."';";
+        $query = "SELECT * FROM session WHERE id = ".$session_id.";";
+        $result = $connection->query($query);
+        $username = $result->fetch_row();
 
-        $favsList = [];
+        $query = "SELECT favorite.user_id, favorite.goods_id, users.username, goods.name, shop.brand, goods.img FROM favorite LEFT JOIN users ON favorite.user_id = users.id JOIN goods ON favorite.goods_id = goods.id JOIN shop ON shop.id = goods.shop_id WHERE users.username = '".$username[2]."';";
+        $result = $connection->query($query);
 
-        for ($row = 0; $row < pg_numrows($result); $row++) {
+        $goodsList = [];
 
-            $favsList[] = pg_fetch_assoc($result);
+        for ($row = 0; $row < $result->num_rows; $row++) {
+
+            $goodsList[] = $result->fetch_assoc();
 
         }
 
-        echo json_encode($favsList);
+        echo json_encode($goodsList);
     }
 
     function getAdmin($connection,$username){
         $query = "SELECT username, admin FROM users WHERE username = '".$username."';";
-        $result = pg_exec($connection, $query);
+        $result = $connection->query($query);
 
-        $adminList = [];
+        $goodsList = [];
 
-        for ($row = 0; $row < pg_numrows($result); $row++) {
+        for ($row = 0; $row < $result->num_rows; $row++) {
 
-            $adminList[] = pg_fetch_assoc($result);
+            $goodsList[] = $result->fetch_assoc();
 
         }
 
-        echo json_encode($adminList);
+        echo json_encode($goodsList);
     }
 
-    function getAuth($connection,$username){
-        $query = "SELECT username, password FROM users WHERE username = '".$username."';";
-        $result = pg_exec($connection, $query);
+    function getAuth($connection,$username,$password){
+        $query = "SELECT * FROM users WHERE username = '".$username."' AND password = '".$password."';";
+        $result = $connection->query($query);
 
-        $authList = [];
+        $goodsList = [];
+        if(($result->num_rows) > 0){
+            $query = "INSERT INTO session(session, user) VALUES(1,'".$username."');";
+            $result = $connection->query($query);
+            $query = "SELECT id FROM session WHERE user = '".$username."' AND session = 1;";
+            $result = $connection->query($query);
 
-        for ($row = 0; $row < pg_numrows($result); $row++) {
+            $goodsList = [];
 
-            $authList[] = pg_fetch_assoc($result);
+            for ($row = 0; $row < $result->num_rows; $row++) {
 
+                $goodsList[] = $result->fetch_assoc();
+
+            }
+
+            echo json_encode($goodsList);
+        }else{
+            echo 'login or password are incorrect';
         }
-
-        echo json_encode($authList);
     }
 
-    function postReg($connection,$data){
-        $username = $data['username'];
-        $password = $data ['password'];
-        $repassword = $data ['repassword'];
-
-        if($password === $repassword){
-            $query = "INSERT INTO users(username,password) VALUES('".$username."','".$password."')";
-            $result = pg_exec($connection, $query);
-            echo 'registration successful';
-        } else {
-          echo 'login or password uncorrect';
+    function getAuthById($connection,$id){
+        $query = "SELECT * FROM session WHERE id = ".$id." AND session = 1;";
+        $result = $connection->query($query);
+        if(($result->num_rows)>0){
+            echo 'Already auth';
+        }else{
+            echo 'Token invalid';
         }
+    }
+
+    function breakAuthById($connection,$id){
+        $query = "UPDATE session SET session = 0 WHERE id = ".$id.";";
+        $result = $connection->query($query);
+        echo 'Logout successful';
+    }
+
+    function postReg($connection,$username,$password){
+
+        $query = "INSERT INTO users(username,password) VALUES('".$username."','".$password."')";
+        $result = $connection->query($query);
+        echo 'registration successful';
 
     }
 
@@ -129,33 +183,38 @@
         $type = $data['type'];
         $description = $data['description'];
         $name = $data['name'];
+        $img = $data['img'];
 
-        $query = "SELECT * FROM shop WHERE brand = '".$brand."';";
-        $result = pg_exec($connection, $query);
-        $shop_id = pg_fetch_result($result, 0, 'id');
+        $query = "SELECT id FROM shop WHERE brand = '".$brand."';";
+        $result = $connection->query($query);
+        $shop_id = $result->fetch_row();
 
-        $query = "INSERT INTO goods(shop_id,price,type,description,name) VALUES(".$shop_id.",".$price.",'".$type."','".$description."','".$name."')";
-        $result = pg_exec($connection, $query);
+        $query = "INSERT INTO goods(shop_id,price,type,description,name,img) VALUES(".$shop_id[0].",".$price.",'".$type."','".$description."','".$name."','".$img."')";
+        $result = $connection->query($query);
 
     }
 
-    function postFav($connection,$data,$username){
-        $goods_name = $data['name'];
+    function postFav($connection,$goods_id,$session_id){
+        #$goods_name = $data['name'];
 
-        $query = "SELECT * FROM goods WHERE name = '".$goods_name."';";
-        $result = pg_exec($connection, $query);
-        $goods_id = pg_fetch_result($result, 0, 'id');
+        $query = "SELECT * FROM session WHERE id = ".$session_id.";";
+        $result = $connection->query($query);
+        $username = $result->fetch_row();
 
-        $query = "SELECT * FROM users WHERE username = '".$username."';";
-        $result = pg_exec($connection, $query);
-        $user_id = pg_fetch_result($result, 0, 'id');
+        #$query = "SELECT * FROM goods WHERE name = '".$goods_name."';";
+        #$result = $connection->query($query);
+        #$goods_id = $result->fetch_result(0, 'id');
 
-        $query = "SELECT * FROM favorite WHERE user_id = ".$user_id." AND goods_id =".$goods_id.";";
-        $result = pg_exec($connection, $query);
+        $query = "SELECT id FROM users WHERE username = '".$username[2]."';";
+        $result = $connection->query($query);
+        $user_id = $result->fetch_row();
 
-        if(pg_numrows($result) < 1){
-            $query = "INSERT INTO favorite VALUES(".$user_id.",".$goods_id.");";
-            $result = pg_exec($connection, $query);
+        $query = "SELECT * FROM favorite WHERE user_id = ".$user_id[0]." AND goods_id =".$goods_id.";";
+        $result = $connection->query($query);
+
+        if($result->num_rows < 1){
+            $query = "INSERT INTO favorite VALUES(".$user_id[0].",".$goods_id.");";
+            $result = $connection->query($query);
             echo "Added in fav";
         } else {
             echo "Already in fav";
@@ -170,14 +229,14 @@
       $description = $data['description'];
       $name = $data['name'];
 
-      $query = "SELECT * FROM shop WHERE brand = '".$brand."';";
-      $result = pg_exec($connection, $query);
-      $shop_id = pg_fetch_result($result, 0, 'id');
+      $query = "SELECT id FROM shop WHERE brand = '".$brand."';";
+      $result = $connection->query($query);
+      $shop_id = $result->fetch_row();
 
       echo $brand;
 
-      $query = "UPDATE goods SET shop_id = ".$shop_id.",price = ".$price.",type = '".$type."',description = '".$description."', name = '".$name."' WHERE name = '".$name."';";
-      $result = pg_exec($connection, $query);
+      $query = "UPDATE goods SET shop_id = ".$shop_id[0].",price = ".$price.",type = '".$type."',description = '".$description."', name = '".$name."' WHERE name = '".$name."';";
+      $result = $connection->query($query);
     }
 
 ?>

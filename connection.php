@@ -1,3 +1,3 @@
 <?php
-    $connection = pg_connect("host=localhost dbname=shop user=postgres password=admin");
+    $connection = new mysqli('expample.com', 'login', 'password', 'db_name');
 ?>

@@ -1,5 +1,9 @@
 <?php
 
+    header('Access-Control-Allow-Headers:*');
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: *');
+    header('Access-Control-Allow-Credentials: true');
     header('Content-type: json/application');
 
     require('connection.php');
@@ -37,12 +41,32 @@
 
                 case 'auth':
                     if(isset($params[1]))
-                        getAuth($connection,$params[1]);
+                        if(isset($params[2])){
+                            getAuth($connection,$params[1],$params[2]);
+                        }
                     break;
 
                 case 'admin':
                     if(isset($params[1]))
                         getAdmin($connection,$params[1]);
+                    break;
+
+                case 'getauth':
+                    if(isset($params[1]))
+                        getAuthById($connection,$params[1]);
+                    break;
+
+                case 'breakauth':
+                    if(isset($params[1]))
+                        breakAuthById($connection,$params[1]);
+                    break;
+
+                case 'type':
+                        getTypes($connection);
+                    break;
+
+                case 'brand':
+                        getBrands($connection);
                     break;
 
                 }
@@ -51,12 +75,19 @@
         case 'POST':
             switch($params[0]){
                 case 'favorite':
-                    if(isset($params[1]))
-                        postFav($connection,$_POST,$params[1]);
+                    if(isset($params[1])){
+                        if(isset($params[2])){
+                            postFav($connection,$params[2],$params[1]);
+                          }
+                    }
                     break;
 
                 case 'reg':
-                    postReg($connection,$_POST);
+                    if(isset($params[1])){
+                        if(isset($params[2])){
+                            postReg($connection,$params[1],$params[2]);
+                          }
+                    }
                     break;
 
                 case 'goods':
@@ -75,5 +106,4 @@
             }
             break;
     }
-
 ?>
